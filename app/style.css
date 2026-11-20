@@ -1,0 +1,183 @@
+@font-face {
+  font-family: "Anton";
+  src: url("./fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ink: #17121f;
+  --ink-soft: #5b5468;
+  --paper: #f4eef7;
+  --card: #fffdf9;
+  --line: #d8cfdf;
+  --hot: #ff2d78;
+  --sun: #ff7a18;
+  --night: #2b1055;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: linear-gradient(160deg, #2b1055 0%, #7597de 45%, #ff7a18 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 8px;
+  color: #fff;
+}
+
+.brand h1 {
+  margin: 0;
+  font-family: "Anton", system-ui, sans-serif;
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.brand p { margin: 6px 0 0; max-width: 560px; color: #ffe9f2; }
+
+.top-actions { display: flex; gap: 10px; }
+
+button {
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #241b2e;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(1.15); }
+button.primary { background: var(--hot); }
+button:disabled { opacity: 0.5; cursor: default; }
+
+.studio {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px 28px;
+}
+
+.panel {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 10px 34px rgba(20, 5, 40, 0.35);
+  padding: 20px;
+}
+
+.controls { display: flex; flex-direction: column; gap: 12px; }
+.controls h2 { margin: 8px 0 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; color: var(--night); }
+.controls h2:first-child { margin-top: 0; }
+.controls p { margin: 0; }
+.hint { color: var(--ink-soft); font-size: 13px; }
+
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
+
+input[type=text], select {
+  font: inherit;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+input[type=range] { width: 100%; accent-color: var(--hot); }
+
+.file-label {
+  display: block;
+  padding: 12px;
+  border: 2px dashed var(--line);
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.file-label input { display: none; }
+
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; }
+.row button { padding: 9px 8px; font-size: 13px; }
+
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.choice { background: #efe9f2; color: var(--ink); }
+.choice.active { background: var(--night); color: #fff; }
+
+.tray { display: flex; gap: 8px; flex-wrap: wrap; min-height: 64px; }
+.tray img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  cursor: pointer;
+}
+.tray img.selected { border-color: var(--hot); }
+.tray .empty { color: var(--ink-soft); font-size: 13px; align-self: center; }
+
+.stage { text-align: center; }
+.stage canvas {
+  max-width: 100%;
+  max-height: calc(100vh - 220px);
+  width: auto;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 14px 44px rgba(10, 2, 30, 0.5);
+  cursor: grab;
+  touch-action: none;
+}
+.stage canvas:active { cursor: grabbing; }
+.stage .hint { margin: 12px 0 0; }
+
+#status { min-height: 1.4em; font-weight: 700; color: var(--night); }
+
+.foot {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 28px;
+  color: #ffe9f2;
+  font-size: 13px;
+}
+.foot p { margin: 0; }
+
+/* Screenshot mode: hide everything but the cover, fill the viewport. */
+body.shot-cover .topbar,
+body.shot-cover .controls,
+body.shot-cover .foot,
+body.shot-cover .stage .hint { display: none; }
+body.shot-cover { background: #000; }
+body.shot-cover .studio { display: block; max-width: none; padding: 0; margin: 0; }
+body.shot-cover .stage { background: transparent; border-radius: 0; box-shadow: none; padding: 0; }
+body.shot-cover .stage canvas {
+  max-width: none;
+  max-height: none;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .studio { grid-template-columns: 1fr; }
+  .brand h1 { font-size: 34px; }
+}
