@@ -176,6 +176,31 @@ async function loadSample(name) {
   render();
 }
 
+// Loads one sample photo per panel, cycling through the names given, so a
+// screenshot scene can show a poster collage instead of one photo repeated.
+async function loadPanelPhotos(names) {
+  const loaded = [];
+  for (const name of names) {
+    const url = `./samples/${name}.jpg`;
+    let entry = tray.find((p) => p.url === url);
+    if (!entry) {
+      const img = await loadImage(url);
+      entry = { img, url, name: `${name}.jpg (sample)` };
+      tray.push(entry);
+    }
+    loaded.push(entry.img);
+  }
+  state.panels.forEach((slot, i) => {
+    slot.img = loaded[i % loaded.length];
+    slot.zoom = 1;
+    slot.ox = 0;
+    slot.oy = 0;
+  });
+  selectedTray = tray.length - 1;
+  refreshTray();
+  render();
+}
+
 // --- Controls -------------------------------------------------------------
 
 document.getElementById("photoInput").addEventListener("change", (e) => {
@@ -409,11 +434,26 @@ async function runShot() {
     state.tagline = tagline;
     document.getElementById("taglineInput").value = tagline;
   }
-  const photo = query.get("photo") ?? "pier";
+  const photos = query.get("photos");
   try {
-    await loadSample(photo);
+    if (photos) {
+      await loadPanelPhotos(photos.split(",").map((s) => s.trim()).filter(Boolean));
+    } else {
+      await loadSample(query.get("photo") ?? "pier");
+    }
   } catch {
     setStatus("The sample photo did not load.");
+  }
+  // ?vary=1 frames each panel differently — a closer crop here, a shift
+  // there — so a one-photo cover reads as a poster, not a tiled repeat.
+  if (query.get("vary")) {
+    const zooms = [1, 1.5, 1.3, 1.8];
+    const shifts = [[0, 0], [0.1, -0.06], [-0.12, 0.05], [0.06, 0.08]];
+    state.panels.forEach((slot, i) => {
+      slot.zoom = zooms[i % zooms.length];
+      slot.ox = shifts[i % shifts.length][0];
+      slot.oy = shifts[i % shifts.length][1];
+    });
   }
   // Sync the choice buttons with the scene, so the editor shot shows them.
   document.querySelectorAll("#layoutBtns .choice").forEach((b) => {
