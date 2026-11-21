@@ -1,3 +1,4 @@
+Sunset Cover Studio ships the Anton typeface under the licence below.
 Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
