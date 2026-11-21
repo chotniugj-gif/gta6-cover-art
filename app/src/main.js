@@ -1,9 +1,10 @@
-// Sunset Cover Studio — page wiring.
+// Sunset Cover Studio — page wiring, v2.
 //
 // Keeps the cover state, binds every control, and paints the live preview.
 // Photos are read on this machine with FileReader and object URLs; nothing
 // is uploaded anywhere. Exports draw the same cover offscreen at the exact
-// post size and download it as a PNG.
+// post size and download it as a PNG. Panels frame photos from the top,
+// so a portrait photo keeps the sitter's head in frame.
 //
 // A `?shot=` query sets up a fixed scene for a screenshot instead:
 //   ?shot=editor — the editor with a sample photo loaded
@@ -308,7 +309,8 @@ document.getElementById("fitBtn").addEventListener("click", () => {
   const p = geo.panels[selectedPanel];
   const base = Math.max(p.w / slot.img.naturalWidth, p.h / slot.img.naturalHeight);
   const fit = Math.min(p.w / slot.img.naturalWidth, p.h / slot.img.naturalHeight);
-  slot.zoom = fit / base;
+  // In a blurFill layout zoom 1 already means fit, so Fit leaves zoom at 1.
+  slot.zoom = geo.blurFill ? 1 : fit / base;
   slot.ox = 0;
   slot.oy = 0;
   refreshPanelHint();
@@ -321,7 +323,15 @@ document.getElementById("fillBtn").addEventListener("click", () => {
     return;
   }
   const slot = state.panels[selectedPanel];
-  slot.zoom = 1;
+  if (!slot.img) return;
+  // In a blurFill layout zoom 1 means fit, so Fill zooms to the cover
+  // ratio instead; elsewhere zoom 1 already fills the panel.
+  const geo = layoutGeometry(state.layout, state.size.w, state.size.h);
+  const p = geo.panels[selectedPanel];
+  slot.zoom = geo.blurFill
+    ? Math.max(p.w / slot.img.naturalWidth, p.h / slot.img.naturalHeight)
+      / Math.min(p.w / slot.img.naturalWidth, p.h / slot.img.naturalHeight)
+    : 1;
   slot.ox = 0;
   slot.oy = 0;
   refreshPanelHint();
@@ -444,11 +454,13 @@ async function runShot() {
   } catch {
     setStatus("The sample photo did not load.");
   }
-  // ?vary=1 frames each panel differently — a closer crop here, a shift
-  // there — so a one-photo cover reads as a poster, not a tiled repeat.
+  // ?vary=1 frames each panel a little differently — a closer crop here,
+  // a shift there — so a one-photo cover reads as a poster, not a tiled
+  // repeat. The framings stay gentle and the photos stay top-anchored,
+  // so no panel crops a sitter's head out of the shot.
   if (query.get("vary")) {
-    const zooms = [1, 1.5, 1.3, 1.8];
-    const shifts = [[0, 0], [0.1, -0.06], [-0.12, 0.05], [0.06, 0.08]];
+    const zooms = [1, 1.15, 1.25, 1.1];
+    const shifts = [[0, 0], [0.08, -0.02], [-0.08, 0.02], [0.05, 0.03]];
     state.panels.forEach((slot, i) => {
       slot.zoom = zooms[i % zooms.length];
       slot.ox = shifts[i % shifts.length][0];
