@@ -119,6 +119,8 @@ input[type=range] { width: 100%; accent-color: var(--hot); }
 .row button { padding: 9px 8px; font-size: 13px; }
 
 .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.choice-grid.three { grid-template-columns: repeat(3, 1fr); }
+.choice-grid.three .choice { font-size: 13px; padding: 10px 6px; }
 .choice { background: #efe9f2; color: var(--ink); }
 .choice.active { background: var(--night); color: #fff; }
 
