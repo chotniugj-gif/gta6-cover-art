@@ -11,7 +11,7 @@
 <header class="topbar">
   <div class="brand">
     <h1>Sunset Cover Studio</h1>
-    <p>Turn your photo and a caption into poster cover art — sunset and neon grades, multi-panel layouts, exported as a PNG.</p>
+    <p>Turn your photo and a caption into poster cover art — sunset, neon and Vice heat grades, five layouts, exported as a PNG.</p>
   </div>
   <div class="top-actions">
     <button id="sampleBtn" type="button">Load a sample photo</button>
@@ -22,7 +22,7 @@
 <main class="studio">
   <section class="panel controls" aria-label="Cover controls">
     <h2>1 · Photos</h2>
-    <p class="hint">Add your own photos — they stay on your machine, never uploaded. Click a photo in the tray, then click a panel to place it there. Drag a panel to move its photo, scroll on it to zoom.</p>
+    <p class="hint">Add your own photos — they stay on your machine, never uploaded. Click a photo in the tray, then click a panel to place it there. Drag a panel to move its photo, scroll on it to zoom. Photos sit top-anchored in their panels, so heads stay in frame.</p>
     <label class="file-label">Choose photos
       <input id="photoInput" type="file" accept="image/*" multiple>
     </label>
@@ -33,18 +33,20 @@
     </div>
 
     <h2>2 · Layout</h2>
-    <div id="layoutBtns" class="choice-grid" role="group" aria-label="Panel layout">
+    <div id="layoutBtns" class="choice-grid three" role="group" aria-label="Panel layout">
       <button type="button" data-layout="grid" class="choice active">Four panels</button>
       <button type="button" data-layout="hero" class="choice">Hero split</button>
       <button type="button" data-layout="strip" class="choice">Three strips</button>
       <button type="button" data-layout="single" class="choice">One photo</button>
+      <button type="button" data-layout="banner" class="choice">Center band</button>
     </div>
 
     <h2>3 · Colour grade</h2>
-    <div id="gradeBtns" class="choice-grid" role="group" aria-label="Colour grade">
+    <div id="gradeBtns" class="choice-grid three" role="group" aria-label="Colour grade">
       <button type="button" data-grade="sunset" class="choice active">Sunset</button>
       <button type="button" data-grade="neon" class="choice">Neon night</button>
       <button type="button" data-grade="dusk" class="choice">Palm dusk</button>
+      <button type="button" data-grade="vice" class="choice">Vice heat</button>
       <button type="button" data-grade="none" class="choice">Original</button>
     </div>
 
@@ -102,7 +104,7 @@
 </main>
 
 <footer class="foot">
-  <p>Sunset Cover Studio makes original poster-style art from your own photos. It ships no game artwork, logo or font — the lettering is Anton, under the SIL Open Font License.</p>
+  <p>Sunset Cover Studio makes original poster-style art from your own photos. It ships no game artwork, logo or font — the lettering is Anton, under the SIL Open Font License, and the striped sun and palm silhouettes are drawn in code.</p>
 </footer>
 
 <script type="module" src="./src/main.js"></script>
